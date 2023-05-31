@@ -1,0 +1,82 @@
+*** WORKFLOW ***
+
+
+1. Pull Image = docker pull cassandra
+O/P:
+Using default tag: latest
+latest: Pulling from library/cassandra
+99803d4b97f3: Pull complete 
+7affba4c9a33: Pull complete 
+272204ded759: Pull complete 
+1bd3d9ca0baf: Pull complete 
+378262bde537: Pull complete 
+248d11231fdc: Pull complete 
+b5291296f116: Pull complete 
+f2ee33e4006d: Pull complete 
+25577cbc0305: Pull complete 
+Digest: sha256:63f6e18ad5ed3fdaa16d36e175260fe2fd9c944cb7aa9833558c2de68e56753d
+Status: Downloaded newer image for cassandra:latest
+docker.io/library/cassandra:latest
+
+
+
+
+2. Check if the image is pulled or not = docker images
+O/P:
+REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+cassandra    latest    2458f287ee04   18 hours ago   357MB
+
+
+
+
+3. Run container using Image = docker run -p 7000:7000 -p 7001:7001 -p 7199:7199 -p 9042:9042 -p 9160:9160 --name cassandra -d cassandra:latest
+O/P:
+19de29f07827089aafdf9be64eddaa540b3f8c50e98e27a15ce633e54013240b
+
+
+
+
+4. Check Container is running or not = docker ps
+O/P:
+CONTAINER ID   IMAGE              COMMAND                  CREATED              STATUS              PORTS                                                                                                                                                                                            NAMES
+19de29f07827   cassandra:latest   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:7000-7001->7000-7001/tcp, :::7000-7001->7000-7001/tcp, 0.0.0.0:7199->7199/tcp, :::7199->7199/tcp, 0.0.0.0:9042->9042/tcp, :::9042->9042/tcp, 0.0.0.0:9160->9160/tcp, :::9160->9160/tcp   cassandra
+
+
+5. Get Inside the container = docker exec -it 19de29f07827 bash
+
+
+6. Start Cassandra Shell = cqlsh
+
+
+7. Create and Describe Keyspace = 
+Creation: 
+CREATE KEYSPACE techframer WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};
+Describe:
+DESC KEYSPACES
+O/P:
+system       system_distributed  system_traces  system_virtual_schema
+system_auth  system_schema       system_views   techframer    
+
+
+
+
+8. Create table = 
+use techframer;
+CREATE TABLE student(student_id int PRIMARY KEY, student_name text, student_city text, student_fees varint, student_phone varint);
+
+
+
+
+9. Add and Check data = 
+Select Data: SELECT * FROM student;
+O/P:
+student_id | student_city | student_fees | student_name | student_phone
+------------+--------------+--------------+--------------+---------------
+(0 rows)
+
+Insert Data: INSERT INTO student (student_id, student_fees, student_name) VALUES(1,5000,'Gautami');
+O/P:
+student_id | student_city | student_fees | student_name | student_phone
+------------+--------------+--------------+--------------+---------------
+          1 |         null |         5000 |      Gautami |          null
+(1 rows)
